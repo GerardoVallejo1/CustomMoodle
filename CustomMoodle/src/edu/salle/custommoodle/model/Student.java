@@ -5,6 +5,8 @@
  */
 package edu.salle.custommoodle.model;
 
+import java.util.Objects;
+
 /**
  *
  * @author Gerardo Vallejo
@@ -51,4 +53,22 @@ public class Student {
     public String toString() {
         return String.format("id=%s,\nname=%s,\nlastName=%s",id, name, lastName);
     }        
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
+    }
 }
