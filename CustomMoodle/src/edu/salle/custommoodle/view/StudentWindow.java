@@ -8,6 +8,7 @@ package edu.salle.custommoodle.view;
 import edu.salle.custommoodle.businesslogic.StudentBLO;
 import edu.salle.custommoodle.model.Student;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,6 +22,7 @@ public class StudentWindow extends javax.swing.JFrame {
     public StudentWindow() {
         initComponents();
         setLocationRelativeTo(null);
+        studentBLO.load();
     }
 
     /**
@@ -45,6 +47,7 @@ public class StudentWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tStudents = new javax.swing.JTable();
         btnShow = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -109,6 +112,14 @@ public class StudentWindow extends javax.swing.JFrame {
         });
         getContentPane().add(btnShow, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 100, -1, -1));
 
+        btnSalir.setText("Exit");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 280, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -126,12 +137,25 @@ public class StudentWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        String id = tfId.getText();
-        Student student = studentBLO.find(id);
-        if (student != null) {
-            tfName.setText(student.getName());
-            tfLastName.setText(student.getLastName());
-        }
+//        String id = tfId.getText();
+//        Student student = studentBLO.find(id);
+//        if (student != null) {
+//            tfName.setText(student.getName());
+//            tfLastName.setText(student.getLastName());
+//        }
+         
+         String lastName = tfLastName.getText().trim();
+         
+         if (!lastName.isEmpty()) {
+            List<Student> studentList= studentBLO.findByLastName(lastName);
+             if (!studentList.isEmpty()) {
+                 refreshTable(studentList);
+             }
+        }else {
+             JOptionPane.showMessageDialog(null, "You need to fill the last name");
+         }
+         
+         
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void clearTable(){
@@ -142,11 +166,12 @@ public class StudentWindow extends javax.swing.JFrame {
         }
     }
     
-    private void refreshTable()
+
+    
+    private void refreshTable(List<Student> studentList )
     {
         clearTable(); 
         
-        List<Student> studentList = studentBLO.findAll();
         DefaultTableModel dtm = (DefaultTableModel) tStudents.getModel();
         Object[] emptyRow={""};
         for (int i = 0; i < studentList.size(); i++) {
@@ -159,8 +184,12 @@ public class StudentWindow extends javax.swing.JFrame {
     }
     
     private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
-        refreshTable();
+        refreshTable(studentBLO.findAll());
     }//GEN-LAST:event_btnShowActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,6 +228,7 @@ public class StudentWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnShow;
